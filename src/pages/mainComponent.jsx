@@ -137,7 +137,7 @@ function MainComponent() {
       setTasks(updatedTasks);
       updateFilteredTasks(response.data.task);
       setEditingTask(null);
-      closeEditModal(); // Close the edit modal after editing
+      closeEditModal();
     } catch (error) {
       console.error(error);
     }
@@ -267,18 +267,18 @@ function MainComponent() {
           value={newTask.title}
           onChange={handleChange}
           required
-          mb={2} // Add margin-bottom to create space
-          border="2px" // Make border thicker
-          borderColor="gray.400" // Change border color
+          mb={2} 
+          border="2px"
+          borderColor="gray.400"
         />
         <Textarea
           name="description"
           placeholder="Task Description"
           value={newTask.description}
           onChange={handleChange}
-          mb={2} // Add margin-bottom to create space
-          border="2px" // Make border thicker
-          borderColor="gray.400" // Change border color
+          mb={2}
+          border="2px"
+          borderColor="gray.400"
         />
         <FormLabel htmlFor="dueDate">Due Date</FormLabel>
         <Input
@@ -288,12 +288,11 @@ function MainComponent() {
           value={newTask.dueDate}
           onChange={handleChange}
           required
-          mb={2} // Add margin-bottom to create space
-          border="2px" // Make border thicker
-          borderColor="gray.400" // Change border color
+          mb={2} 
+          border="2px"
+          borderColor="gray.400"
         />
         <Button type="submit" mt={2} bg="#6000f3" color="white">
-          {/* Change color scheme to 'teal' */}
           Add Task
         </Button>
       </Box>

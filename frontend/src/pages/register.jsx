@@ -247,7 +247,7 @@ export default function Register() {
             >
               Already registered with us?{" "}
               <Text as="span" color="#4250f5" fontWeight="600">
-                <Link to="/login">Login</Link>
+                <Link to="/">Login</Link>
               </Text>
             </Text>
           </Center>

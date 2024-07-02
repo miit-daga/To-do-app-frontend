@@ -20,15 +20,14 @@ function Navbar() {
   const toast = useToast();
   const navigate = useNavigate();
   const { isAuth, removeAuth, setUserName, setUserEmail } = useAuthStore(
-    (state) => {
-      return {
-        isAuth: state.isAuth,
-        removeAuth: state.removeAuth,
-        setUserName: state.setUserName,
-        setUserEmail: state.setUserEmail,
-      };
-    },
+    (state) => ({
+      isAuth: state.isAuth,
+      removeAuth: state.removeAuth,
+      setUserName: state.setUserName,
+      setUserEmail: state.setUserEmail,
+    })
   );
+
   const logout = () => {
     logOutUser();
     removeAuth();
@@ -55,37 +54,36 @@ function Navbar() {
       mb={["2rem", "3rem"]}
       boxShadow="0px 3px 6px rgba(0, 0, 0, 0.1)"
     >
-      <Text
-        color="#646681"
-        fontWeight="extrabold"
-        fontSize={["1.5rem", "2.2rem"]}
-      >
+      <Text color="#646681" fontWeight="extrabold" fontSize={["1.5rem", "2.2rem"]}>
         <Link to="/">Todo-App</Link>
       </Text>
       <Flex display={["block", "none"]}>
         <Menu>
           <MenuButton
             as={IconButton}
-            icon={
-              <GiHamburgerMenu
-                color="#4250f5"
-                style={{ width: "1.1rem", height: "1.1rem" }}
-              />
-            }
+            icon={<GiHamburgerMenu color="#4250f5" style={{ width: "1.1rem", height: "1.1rem" }} />}
             variant="outline"
             borderWidth="0.15rem"
             borderColor="#4250f5"
           />
           <MenuList>
-            <MenuItem
-              onClick={() => navigate("/register")}
-              fontSize="1.2rem"
-              icon={
-                <AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />
-              }
-            >
-              Register
-            </MenuItem>
+            {isAuth ? (
+              <MenuItem
+                onClick={() => navigate("/updateprofile")}
+                fontSize="1.2rem"
+                icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+              >
+                Update user details
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => navigate("/register")}
+                fontSize="1.2rem"
+                icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+              >
+                Register
+              </MenuItem>
+            )}
             <MenuItem
               isDisabled={!isAuth}
               onClick={logout}
@@ -98,20 +96,31 @@ function Navbar() {
         </Menu>
       </Flex>
       <Flex display={["none", "block"]}>
-        <Button
-          onClick={() => navigate("/register")}
-          letterSpacing={1}
-          fontSize="1.2rem"
-          bg="#4250f5"
-          color="white"
-          mr="20px"
-          _hover={{
-            bg: "#2732b8",
-          }}
-        >
-          Register
-        </Button>
-
+        {isAuth ? (
+          <Button
+            onClick={() => navigate("/updateprofile")}
+            letterSpacing={1}
+            fontSize="1.2rem"
+            bg="#4250f5"
+            color="white"
+            mr="20px"
+            _hover={{ bg: "#2732b8" }}
+          >
+            Update user details
+          </Button>
+        ) : (
+          <Button
+            onClick={() => navigate("/register")}
+            letterSpacing={1}
+            fontSize="1.2rem"
+            bg="#4250f5"
+            color="white"
+            mr="20px"
+            _hover={{ bg: "#2732b8" }}
+          >
+            Register
+          </Button>
+        )}
         <Button
           isDisabled={!isAuth}
           onClick={logout}
@@ -119,9 +128,7 @@ function Navbar() {
           bg="gray.500"
           letterSpacing={1}
           fontSize="1.2rem"
-          _hover={{
-            bg: "gray.600",
-          }}
+          _hover={{ bg: "gray.600" }}
         >
           Logout
         </Button>

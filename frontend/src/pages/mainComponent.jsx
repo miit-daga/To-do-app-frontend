@@ -292,7 +292,7 @@ function MainComponent() {
           border="2px"
           borderColor="gray.400"
         />
-        <Button type="submit" mt={2} bg="#6000f3" color="white">
+        <Button type="submit" mt={2} bg="#6000f3" color="white" _hover={{ bg: "#2732b8" }}>
           Add Task
         </Button>
       </Box>

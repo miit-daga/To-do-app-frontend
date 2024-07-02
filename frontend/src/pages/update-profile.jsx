@@ -40,10 +40,14 @@ export default function UpdateProfile() {
     const onSubmit = async (e) => {
         e.preventDefault();
         let errorDescription = "";
-        const updates = {
-            username: nameRef.current.value,
-            email: emailRef.current.value,
-        };
+        const updates = {};
+        
+        if (nameRef.current.value) {
+            updates.username = nameRef.current.value;
+        }
+        if (emailRef.current.value) {
+            updates.email = emailRef.current.value;
+        }
         const password = passwordRef.current.value;
         const password2 = password2Ref.current.value;
 
@@ -63,10 +67,10 @@ export default function UpdateProfile() {
             updates.password = password;
         }
 
-        if (!updates.username || !updates.email) {
+        if (Object.keys(updates).length === 0) {
             toast({
                 title: "Data Error",
-                description: "Please enter data in all the required fields!",
+                description: "Please enter data in at least one field!",
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -79,8 +83,12 @@ export default function UpdateProfile() {
             setLoading(true);
             const response = await updateProfile(updates);
             if (response.status === 200) {
-                setUserName(response.data.username);
-                setUserEmail(response.data.email);
+                if (response.data.username) {
+                    setUserName(response.data.username);
+                }
+                if (response.data.email) {
+                    setUserEmail(response.data.email);
+                }
                 toast({
                     title: "Success",
                     description: "User details updated successfully!",
@@ -145,7 +153,7 @@ export default function UpdateProfile() {
                                         focusBorderColor="#4250f5"
                                         id="name"
                                         name="name"
-                                        defaultValue={userName}
+                                        placeholder="Enter new username..."
                                         ref={nameRef}
                                     />
                                 </Box>
@@ -160,7 +168,7 @@ export default function UpdateProfile() {
                                         focusBorderColor="#4250f5"
                                         id="email"
                                         name="email"
-                                        defaultValue={userEmail}
+                                        placeholder="Enter new email..."
                                         ref={emailRef}
                                     />
                                 </Box>

@@ -186,7 +186,7 @@ function MainComponent() {
   const markAsComplete = async (id) => {
     try {
       const response = await updateTaskStatus(id, { completed: true });
-      const updatedTask = response.data.task;
+      const updatedTask = response.task;
       const updatedTasks = tasks.map((task) =>
         task._id === updatedTask._id ? updatedTask : task
       );
@@ -196,11 +196,11 @@ function MainComponent() {
       console.error(error);
     }
   };
-
+  
   const markAsIncomplete = async (id) => {
     try {
       const response = await updateTaskStatus(id, { completed: false });
-      const updatedTask = response.data.task;
+      const updatedTask = response.task;
       const updatedTasks = tasks.map((task) =>
         task._id === updatedTask._id ? updatedTask : task
       );
@@ -210,7 +210,7 @@ function MainComponent() {
       console.error(error);
     }
   };
-
+  
   const handleDelete = async (id) => {
     try {
       await deleteTask(id);
@@ -260,14 +260,14 @@ function MainComponent() {
   return (
     <div>
       <Navbar />
-      <Box as="form" onSubmit={handleSubmit} mb={4}>
+      <Box as="form" onSubmit={handleSubmit} mb={4} maxW="500px" mx="auto">
         <Input
           name="title"
           placeholder="Task Title"
           value={newTask.title}
           onChange={handleChange}
           required
-          mb={2} 
+          mb={2}
           border="2px"
           borderColor="gray.400"
         />
@@ -288,87 +288,97 @@ function MainComponent() {
           value={newTask.dueDate}
           onChange={handleChange}
           required
-          mb={2} 
+          mb={2}
           border="2px"
           borderColor="gray.400"
         />
-        <Button type="submit" mt={2} bg="#6000f3" color="white" _hover={{ bg: "#2732b8" }}>
+        <Button
+          type="submit"
+          mt={2}
+          bg="#6000f3"
+          color="white"
+          _hover={{ bg: "#2732b8" }}
+        >
           Add Task
         </Button>
       </Box>
-      <Button onClick={toggleCompletedTasks} mr={2} mb={2} colorScheme="blue">
-        {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
-      </Button>
-      <Button onClick={toggleIncompletedTasks} mb={2} colorScheme="blue">
-        {showIncompletedTasks ? "Show All Tasks" : "Show Incompleted Tasks"}
-      </Button>
-      <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-        {(showCompletedTasks
-          ? completedTasks
-          : showIncompletedTasks
+      <Box maxW="500px" mx="auto">
+        <Button onClick={toggleCompletedTasks} mr={2} mb={2} colorScheme="blue">
+          {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
+        </Button>
+        <Button onClick={toggleIncompletedTasks} mb={2} colorScheme="blue">
+          {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
+        </Button>
+      </Box>
+      <Box maxW="500px" mx="auto">
+        <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
+          {(showCompletedTasks
+            ? completedTasks
+            : showIncompletedTasks
             ? incompleteTasks
             : tasks
-        ).map((task, index) => (
-          <li key={task._id} style={{ marginBottom: "1rem" }}>
-            <Box
-              p={4}
-              shadow="md"
-              borderWidth="1px"
-              borderRadius="md"
-              cursor="pointer"
-            >
-              <Text fontWeight="bold">
-                {index + 1}. {task.title}
-              </Text>
-              <Text>{task.description}</Text>
+          ).map((task, index) => (
+            <li key={task._id} style={{ marginBottom: "1rem" }}>
               <Box
-                mt={2}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
+                p={4}
+                shadow="md"
+                borderWidth="1px"
+                borderRadius="md"
+                cursor="pointer"
               >
-                <Button
-                  onClick={() => openTaskDetailsModal(task)}
-                  colorScheme="blue"
+                <Text fontWeight="bold">
+                  {index + 1}. {task.title}
+                </Text>
+                <Text>{task.description}</Text>
+                <Box
+                  mt={2}
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  View Details
-                </Button>
-                <Box>
-                  {task.completed ? (
-                    <Button
-                      onClick={() => markAsIncomplete(task._id)}
-                      colorScheme="orange"
-                    >
-                      Mark as Incomplete
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => markAsComplete(task._id)}
-                      colorScheme="green"
-                    >
-                      Mark as Complete
-                    </Button>
-                  )}
                   <Button
-                    onClick={() => openEditTaskModal(task)}
-                    ml={2}
-                    colorScheme="teal"
+                    onClick={() => openTaskDetailsModal(task)}
+                    colorScheme="blue"
                   >
-                    Edit
+                    View Details
                   </Button>
-                  <Button
-                    onClick={() => handleDelete(task._id)}
-                    ml={2}
-                    colorScheme="red"
-                  >
-                    Delete
-                  </Button>
+                  <Box>
+                    {task.completed ? (
+                      <Button
+                        onClick={() => markAsIncomplete(task._id)}
+                        colorScheme="orange"
+                      >
+                        Mark as Incomplete
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => markAsComplete(task._id)}
+                        colorScheme="green"
+                      >
+                        Mark as Complete
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => openEditTaskModal(task)}
+                      ml={2}
+                      colorScheme="teal"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => handleDelete(task._id)}
+                      ml={2}
+                      colorScheme="red"
+                    >
+                      Delete
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </Box>
 
       {/* Edit Task Modal */}
       <Modal isOpen={editModalOpen} onClose={closeModal}>

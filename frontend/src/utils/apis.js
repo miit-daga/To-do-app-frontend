@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://to-do-app-backend-yyge.onrender.com";
+const API_URL = "http://localhost:3000";
 
 export const register = (userData) => {
   return axios.post(`${API_URL}/signup`, userData, {
@@ -36,8 +36,17 @@ export const updateTask = (id, updatedTask) => {
   return axios.put(`${API_URL}/updatecontent/${id}`, updatedTask, { withCredentials: true });
 };
 
-export const updateTaskStatus = (id) => {
-  return axios.put(`${API_URL}/updatestatus/${id}`, { withCredentials: true });
+export const updateTaskStatus = async (id) => {
+  try {
+    const response = await axios.put(
+      `${API_URL}/updatestatus/${id}`,
+      null,
+      { withCredentials: true }
+    );
+    return response.data; // Return the data directly
+  } catch (error) {
+    throw error; // Throw the error to handle it in the calling function
+  }
 };
 
 export const deleteTask = (id) => {

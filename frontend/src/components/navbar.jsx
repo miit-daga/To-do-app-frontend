@@ -8,19 +8,21 @@ import {
   MenuList,
   MenuItem,
   IconButton,
-  Button,
   useMediaQuery,
+  Button
 } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
+import { HiHome } from "react-icons/hi"; // Importing the Home icon
 import useAuthStore from "../authStore";
 import { logOutUser } from "../utils/apis";
 
 function Navbar() {
   const toast = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuth, removeAuth, setUserName, setUserEmail } = useAuthStore(
     (state) => ({
       isAuth: state.isAuth,
@@ -77,30 +79,28 @@ function Navbar() {
               borderColor="#4250f5"
             />
             <MenuList>
-              {isAuth ? (
-                <>
-                  <MenuItem
-                    onClick={() => navigate("/updateprofile")}
-                    fontSize="1.2rem"
-                    icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
-                  >
-                    Update user details
-                  </MenuItem>
-                  <MenuItem
-                    onClick={logout}
-                    fontSize="1.2rem"
-                    icon={<BiLogOut style={{ width: "20px", height: "20px" }} />}
-                  >
-                    Logout
-                  </MenuItem>
-                </>
-              ) : (
+              {isAuth && location.pathname !== "/" && location.pathname !== "/updateprofile" && (
                 <MenuItem
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/updateprofile")}
                   fontSize="1.2rem"
                   icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
                 >
-                  Register
+                  Update user details
+                </MenuItem>
+              )}
+              {isAuth && location.pathname === "/updateprofile" && (
+                <MenuItem onClick={() => navigate("/home")} 
+                  icon={<HiHome style={{ width: "20px", height: "20px" }} />}>
+                  Home
+                </MenuItem>
+              )}
+              {isAuth && (
+                <MenuItem
+                  onClick={logout}
+                  fontSize="1.2rem"
+                  icon={<BiLogOut style={{ width: "20px", height: "20px" }} />}
+                >
+                  Logout
                 </MenuItem>
               )}
             </MenuList>
@@ -108,40 +108,42 @@ function Navbar() {
         </Flex>
       ) : (
         <Flex>
-          {isAuth ? (
-            <>
-              <Button
-                onClick={() => navigate("/updateprofile")}
-                letterSpacing={1}
-                fontSize="1.2rem"
-                bg="#6000f3"
-                color="white"
-                mr="20px"
-                _hover={{ bg: "#2732b8" }}
-              >
-                Update user details
-              </Button>
-              <Button
-                onClick={logout}
-                color="white"
-                bg="gray.500"
-                letterSpacing={1}
-                fontSize="1.2rem"
-                _hover={{ bg: "gray.600" }}
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
+          {isAuth && location.pathname !== "/" && location.pathname !== "/updateprofile" && (
             <Button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/updateprofile")}
               letterSpacing={1}
               fontSize="1.2rem"
-              bg="#4250f5"
+              bg="#6000f3"
               color="white"
+              mr="20px"
               _hover={{ bg: "#2732b8" }}
             >
-              Register
+              Update user details
+            </Button>
+          )}
+          {isAuth && location.pathname === "/updateprofile" && (
+            <Button
+              onClick={() => navigate("/home")}
+              letterSpacing={1}
+              fontSize="1.2rem"
+              bg="#6000f3"
+              color="white"
+              mr="20px"
+              _hover={{ bg: "#2732b8" }}
+            >
+              Home
+            </Button>
+          )}
+          {isAuth && (
+            <Button
+              onClick={logout}
+              color="white"
+              bg="gray.500"
+              letterSpacing={1}
+              fontSize="1.2rem"
+              _hover={{ bg: "gray.600" }}
+            >
+              Logout
             </Button>
           )}
         </Flex>

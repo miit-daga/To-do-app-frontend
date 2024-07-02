@@ -62,6 +62,9 @@ function MainComponent() {
   } = useDisclosure();
   const [selectedTask, setSelectedTask] = useState(null);
 
+  // State to track whether menu is open or closed
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     const getTasks = async () => {
       try {
@@ -308,10 +311,10 @@ function MainComponent() {
         </Button>
       </Box>
       <Box maxW="500px" mx="auto">
-        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color= "white">
+        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}}>
           {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
         </Button>
-        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color= "white">
+        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}}>
           {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
         </Button>
       </Box>
@@ -343,33 +346,59 @@ function MainComponent() {
                 >
                   <Button
                     onClick={() => openTaskDetailsModal(task)}
-                    bg="#0c75cd" color= "white"
+                    bg="#fa893e" color= "white" _hover={{bg :"#fa6e11"}}
                   >
                     View Details
                   </Button>
                   <Box display={{ base: "block", md: "none" }}>
-                    <Menu>
+                    <Menu
+                      isOpen={isMenuOpen}
+                      onClose={() => setIsMenuOpen(false)}
+                    >
                       <MenuButton
                         as={Button}
-                        bg="#0c75cd" color= "white"
+                        bg="#fa893e"
+                        color="white"
+                        _hover={{ bg: "#fa6e11" }}
                         rightIcon={<ChevronDownIcon />}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
                       >
                         Options
                       </MenuButton>
                       <MenuList>
                         {task.completed ? (
-                          <MenuItem onClick={() => markAsIncomplete(task._id)}>
+                          <MenuItem
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              markAsIncomplete(task._id);
+                            }}
+                          >
                             Mark as Incomplete
                           </MenuItem>
                         ) : (
-                          <MenuItem onClick={() => markAsComplete(task._id)}>
+                          <MenuItem
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              markAsComplete(task._id);
+                            }}
+                          >
                             Mark as Complete
                           </MenuItem>
                         )}
-                        <MenuItem onClick={() => openEditTaskModal(task)}>
+                        <MenuItem
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            openEditTaskModal(task);
+                          }}
+                        >
                           Edit
                         </MenuItem>
-                        <MenuItem onClick={() => handleDelete(task._id)}>
+                        <MenuItem
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            handleDelete(task._id);
+                          }}
+                        >
                           Delete
                         </MenuItem>
                       </MenuList>
@@ -453,7 +482,7 @@ function MainComponent() {
                   border="2px"
                   borderColor="gray.400"
                 />
-                <Button type="submit" bg="#0c75cd" color= "white" mt={2}>
+                <Button type="submit" bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}} mt={2}>
                   Update Task
                 </Button>
               </Box>
@@ -495,7 +524,7 @@ function MainComponent() {
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button bg="#0c75cd" color= "white" mr={3} onClick={closeModal}>
+            <Button bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}} mr={3} onClick={closeModal}>
               Close
             </Button>
           </ModalFooter>

@@ -14,6 +14,10 @@ import {
   ModalFooter,
   useDisclosure,
   FormLabel,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import useTaskStore from "../taskStore.jsx";
 import Navbar from "../components/navbar.jsx";
@@ -26,6 +30,7 @@ import {
   updateTaskStatus,
   deleteTask,
 } from "../utils/apis.js";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 function MainComponent() {
   const { tasks, setTasks } = useTaskStore((state) => ({
@@ -196,7 +201,7 @@ function MainComponent() {
       console.error(error);
     }
   };
-  
+
   const markAsIncomplete = async (id) => {
     try {
       const response = await updateTaskStatus(id, { completed: false });
@@ -210,7 +215,7 @@ function MainComponent() {
       console.error(error);
     }
   };
-  
+
   const handleDelete = async (id) => {
     try {
       await deleteTask(id);
@@ -303,10 +308,10 @@ function MainComponent() {
         </Button>
       </Box>
       <Box maxW="500px" mx="auto">
-        <Button onClick={toggleCompletedTasks} mr={2} mb={2} colorScheme="blue">
+        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color= "white">
           {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
         </Button>
-        <Button onClick={toggleIncompletedTasks} mb={2} colorScheme="blue">
+        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color= "white">
           {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
         </Button>
       </Box>
@@ -338,11 +343,39 @@ function MainComponent() {
                 >
                   <Button
                     onClick={() => openTaskDetailsModal(task)}
-                    colorScheme="blue"
+                    bg="#0c75cd" color= "white"
                   >
                     View Details
                   </Button>
-                  <Box>
+                  <Box display={{ base: "block", md: "none" }}>
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        bg="#0c75cd" color= "white"
+                        rightIcon={<ChevronDownIcon />}
+                      >
+                        Options
+                      </MenuButton>
+                      <MenuList>
+                        {task.completed ? (
+                          <MenuItem onClick={() => markAsIncomplete(task._id)}>
+                            Mark as Incomplete
+                          </MenuItem>
+                        ) : (
+                          <MenuItem onClick={() => markAsComplete(task._id)}>
+                            Mark as Complete
+                          </MenuItem>
+                        )}
+                        <MenuItem onClick={() => openEditTaskModal(task)}>
+                          Edit
+                        </MenuItem>
+                        <MenuItem onClick={() => handleDelete(task._id)}>
+                          Delete
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Box>
+                  <Box display={{ base: "none", md: "block" }}>
                     {task.completed ? (
                       <Button
                         onClick={() => markAsIncomplete(task._id)}
@@ -420,7 +453,7 @@ function MainComponent() {
                   border="2px"
                   borderColor="gray.400"
                 />
-                <Button type="submit" colorScheme="blue" mt={2}>
+                <Button type="submit" bg="#0c75cd" color= "white" mt={2}>
                   Update Task
                 </Button>
               </Box>
@@ -444,19 +477,25 @@ function MainComponent() {
 
             <Box display="flex" alignItems="flex-start" mt={2}>
               <FormLabel marginRight="1">Completed:</FormLabel>
-              <Text>{selectedTask && (selectedTask.completed ? "Yes" : "No")}</Text>
+              <Text>
+                {selectedTask && (selectedTask.completed ? "Yes" : "No")}
+              </Text>
             </Box>
             <Box display="flex" alignItems="flex-start" mt={2}>
               <FormLabel marginRight="1">Created At:</FormLabel>
-              <Text>{selectedTask && formatDateTime(selectedTask.createdAt)}</Text>
+              <Text>
+                {selectedTask && formatDateTime(selectedTask.createdAt)}
+              </Text>
             </Box>
             <Box display="flex" alignItems="flex-start" mt={2}>
               <FormLabel marginRight="1">Updated At:</FormLabel>
-              <Text>{selectedTask && formatDateTime(selectedTask.updatedAt)}</Text>
+              <Text>
+                {selectedTask && formatDateTime(selectedTask.updatedAt)}
+              </Text>
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={closeModal}>
+            <Button bg="#0c75cd" color= "white" mr={3} onClick={closeModal}>
               Close
             </Button>
           </ModalFooter>

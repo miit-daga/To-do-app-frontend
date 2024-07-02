@@ -1,5 +1,5 @@
+import React from "react";
 import {
-  Button,
   Flex,
   Text,
   useToast,
@@ -8,6 +8,8 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  Button,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -44,6 +46,9 @@ function Navbar() {
     });
   };
 
+  // Check if screen width is less than 768px
+  const [isSmallerThan768] = useMediaQuery("(max-width: 768px)");
+
   return (
     <Flex
       align="center"
@@ -54,85 +59,93 @@ function Navbar() {
       mb={["2rem", "3rem"]}
       boxShadow="0px 3px 6px rgba(0, 0, 0, 0.1)"
     >
-      <Text color="#646681" fontWeight="extrabold" fontSize={["1.5rem", "2.2rem"]}>
+      <Text
+        color="#646681"
+        fontWeight="extrabold"
+        fontSize={["1.5rem", "2.2rem"]}
+      >
         <Link to="/">Todo-App</Link>
       </Text>
-      <Flex display={["block", "none"]}>
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            icon={<GiHamburgerMenu color="#4250f5" style={{ width: "1.1rem", height: "1.1rem" }} />}
-            variant="outline"
-            borderWidth="0.15rem"
-            borderColor="#4250f5"
-          />
-          <MenuList>
-            {isAuth ? (
-              <MenuItem
+      {isSmallerThan768 ? (
+        <Flex>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<GiHamburgerMenu color="#4250f5" />}
+              variant="outline"
+              borderWidth="0.15rem"
+              borderColor="#4250f5"
+            />
+            <MenuList>
+              {isAuth ? (
+                <>
+                  <MenuItem
+                    onClick={() => navigate("/updateprofile")}
+                    fontSize="1.2rem"
+                    icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+                  >
+                    Update user details
+                  </MenuItem>
+                  <MenuItem
+                    onClick={logout}
+                    fontSize="1.2rem"
+                    icon={<BiLogOut style={{ width: "20px", height: "20px" }} />}
+                  >
+                    Logout
+                  </MenuItem>
+                </>
+              ) : (
+                <MenuItem
+                  onClick={() => navigate("/register")}
+                  fontSize="1.2rem"
+                  icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+                >
+                  Register
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        </Flex>
+      ) : (
+        <Flex>
+          {isAuth ? (
+            <>
+              <Button
                 onClick={() => navigate("/updateprofile")}
+                letterSpacing={1}
                 fontSize="1.2rem"
-                icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+                bg="#6000f3"
+                color="white"
+                mr="20px"
+                _hover={{ bg: "#2732b8" }}
               >
                 Update user details
-              </MenuItem>
-            ) : (
-              <MenuItem
-                onClick={() => navigate("/register")}
+              </Button>
+              <Button
+                onClick={logout}
+                color="white"
+                bg="gray.500"
+                letterSpacing={1}
                 fontSize="1.2rem"
-                icon={<AiOutlineUserAdd style={{ width: "20px", height: "20px" }} />}
+                _hover={{ bg: "gray.600" }}
               >
-                Register
-              </MenuItem>
-            )}
-            <MenuItem
-              isDisabled={!isAuth}
-              onClick={logout}
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => navigate("/register")}
+              letterSpacing={1}
               fontSize="1.2rem"
-              icon={<BiLogOut style={{ width: "20px", height: "20px" }} />}
+              bg="#4250f5"
+              color="white"
+              _hover={{ bg: "#2732b8" }}
             >
-              Logout
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-      <Flex display={["none", "block"]}>
-        {isAuth ? (
-          <Button
-            onClick={() => navigate("/updateprofile")}
-            letterSpacing={1}
-            fontSize="1.2rem"
-            bg="#6000f3"
-            color="white"
-            mr="20px"
-            _hover={{ bg: "#2732b8" }}
-          >
-            Update user details
-          </Button>
-        ) : (
-          <Button
-            onClick={() => navigate("/register")}
-            letterSpacing={1}
-            fontSize="1.2rem"
-            bg="#4250f5"
-            color="white"
-            mr="20px"
-            _hover={{ bg: "#2732b8" }}
-          >
-            Register
-          </Button>
-        )}
-        <Button
-          isDisabled={!isAuth}
-          onClick={logout}
-          color="white"
-          bg="gray.500"
-          letterSpacing={1}
-          fontSize="1.2rem"
-          _hover={{ bg: "gray.600" }}
-        >
-          Logout
-        </Button>
-      </Flex>
+              Register
+            </Button>
+          )}
+        </Flex>
+      )}
     </Flex>
   );
 }

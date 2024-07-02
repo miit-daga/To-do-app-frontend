@@ -101,7 +101,7 @@ function Navbar() {
             onClick={() => navigate("/updateprofile")}
             letterSpacing={1}
             fontSize="1.2rem"
-            bg="#4250f5"
+            bg="#6000f3"
             color="white"
             mr="20px"
             _hover={{ bg: "#2732b8" }}

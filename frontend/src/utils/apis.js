@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://to-do-app-backend-yyge.onrender.com";
 
 export const register = (userData) => {
   return axios.post(`${API_URL}/signup`, userData, {

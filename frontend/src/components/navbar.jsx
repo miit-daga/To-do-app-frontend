@@ -79,6 +79,26 @@ function Navbar() {
               borderColor="#4250f5"
             />
             <MenuList>
+              {(!isAuth && location.pathname === "/") && (
+                <MenuItem
+                  as={Link}
+                  to="/register"
+                  fontSize="1.2rem"
+                  color="#2732b8"
+                >
+                  Register
+                </MenuItem>
+              )}
+              {(!isAuth && location.pathname === "/register") && (
+                <MenuItem
+                  as={Link}
+                  to="/"
+                  fontSize="1.2rem"
+                  color="#2732b8"
+                >
+                  Login
+                </MenuItem>
+              )}
               {isAuth && location.pathname !== "/" && location.pathname !== "/updateprofile" && (
                 <MenuItem
                   onClick={() => navigate("/updateprofile")}
@@ -108,6 +128,34 @@ function Navbar() {
         </Flex>
       ) : (
         <Flex>
+          {(!isAuth && location.pathname === "/") && (
+            <Button
+              as={Link}
+              to="/register"
+              letterSpacing={1}
+              fontSize="1.2rem"
+              color="white"
+              bg="#4250f5"
+              mr="20px"
+              _hover={{ bg: "#2732b8", color: "white" }}
+            >
+              Register
+            </Button>
+          )}
+          {(!isAuth && location.pathname === "/register") && (
+            <Button
+              as={Link}
+              to="/"
+              letterSpacing={1}
+              fontSize="1.2rem"
+              color="white"
+              bg="#4250f5"
+              mr="20px"
+              _hover={{ bg: "#2732b8", color: "white" }}
+            >
+              Login
+            </Button>
+          )}
           {isAuth && location.pathname !== "/" && location.pathname !== "/updateprofile" && (
             <Button
               onClick={() => navigate("/updateprofile")}

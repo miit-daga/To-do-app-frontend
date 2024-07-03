@@ -109,7 +109,7 @@ export default function Register() {
         title: "Error",
         description: errorDescription,
         status: "error",
-        duration: 1000,
+        duration: 2000,
         isClosable: true,
         position: "top",
       });

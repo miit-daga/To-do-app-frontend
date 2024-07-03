@@ -18,6 +18,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useToast
 } from "@chakra-ui/react";
 import useTaskStore from "../taskStore.jsx";
 import Navbar from "../components/navbar.jsx";
@@ -50,6 +51,7 @@ function MainComponent() {
   const [showIncompletedTasks, setShowIncompletedTasks] = useState(false);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
+  const toast = useToast();
   const {
     isOpen: editModalOpen,
     onOpen: openEditModal,
@@ -62,7 +64,6 @@ function MainComponent() {
   } = useDisclosure();
   const [selectedTask, setSelectedTask] = useState(null);
 
-  // State to track whether menu is open or closed
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -103,6 +104,22 @@ function MainComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const trimmedTitle = newTask.title.trim();
+    const trimmedDescription = newTask.description.trim();
+  
+    if (!trimmedTitle || !trimmedDescription) {
+      toast({
+        title: "Data Error",
+        description: "Please enter data in all the fields!",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  
     try {
       const response = await createTask(newTask);
       setTasks([...tasks, response.data.task]);
@@ -116,6 +133,7 @@ function MainComponent() {
       console.error(error);
     }
   };
+  
 
   const updateFilteredTasks = (updatedTask) => {
     if (updatedTask.completed && !showCompletedTasks) {
@@ -133,6 +151,20 @@ function MainComponent() {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    const trimmedTitle = editingTask.title.trim();
+    const trimmedDescription = editingTask.description.trim();
+    if (!trimmedTitle || !trimmedDescription) {
+      toast({
+        title: "Data Error",
+        description: "Please enter data in all the fields!",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+  
     try {
       const response = await updateTask(editingTask._id, {
         title: editingTask.title,
@@ -150,6 +182,7 @@ function MainComponent() {
       console.error(error);
     }
   };
+  
 
   const toggleCompletedTasks = async () => {
     setShowCompletedTasks(!showCompletedTasks);
@@ -442,7 +475,6 @@ function MainComponent() {
         </ul>
       </Box>
 
-      {/* Edit Task Modal */}
       <Modal isOpen={editModalOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent>
@@ -466,6 +498,7 @@ function MainComponent() {
                   placeholder="Task Description"
                   value={editingTask.description}
                   onChange={handleEditChange}
+                  required
                   mb={2}
                   border="2px"
                   borderColor="gray.400"
@@ -491,7 +524,6 @@ function MainComponent() {
         </ModalContent>
       </Modal>
 
-      {/* Task Details Modal */}
       <Modal isOpen={detailsModalOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent>

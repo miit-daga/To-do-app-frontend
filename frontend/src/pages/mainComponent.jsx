@@ -104,10 +104,10 @@ function MainComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const trimmedTitle = newTask.title.trim();
     const trimmedDescription = newTask.description.trim();
-  
+
     if (!trimmedTitle || !trimmedDescription) {
       toast({
         title: "Data Error",
@@ -119,7 +119,26 @@ function MainComponent() {
       });
       return;
     }
-  
+
+    const currentDate = new Date();
+    const dueDate = new Date(newTask.dueDate);
+
+    // Set the time part of both dates to midnight to ensure the comparison is only based on the date
+    currentDate.setHours(0, 0, 0, 0);
+    dueDate.setHours(0, 0, 0, 0);
+
+    if (dueDate < currentDate) {
+      toast({
+        title: "Date Error",
+        description: "Due date cannot be in the past!",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
     try {
       const response = await createTask(newTask);
       setTasks([...tasks, response.data.task]);
@@ -130,10 +149,18 @@ function MainComponent() {
         dueDate: "",
       });
     } catch (error) {
-      console.error(error);
+      toast({
+        title: "Submission Error",
+        description: "There was an error submitting the task. Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
-  
+
+
 
   const updateFilteredTasks = (updatedTask) => {
     if (updatedTask.completed && !showCompletedTasks) {
@@ -153,6 +180,7 @@ function MainComponent() {
     e.preventDefault();
     const trimmedTitle = editingTask.title.trim();
     const trimmedDescription = editingTask.description.trim();
+
     if (!trimmedTitle || !trimmedDescription) {
       toast({
         title: "Data Error",
@@ -164,7 +192,26 @@ function MainComponent() {
       });
       return;
     }
-  
+
+    const currentDate = new Date();
+    const dueDate = new Date(editingTask.dueDate);
+
+    // Set the time part of both dates to midnight to ensure the comparison is only based on the date
+    currentDate.setHours(0, 0, 0, 0);
+    dueDate.setHours(0, 0, 0, 0);
+
+    if (dueDate < currentDate) {
+      toast({
+        title: "Date Error",
+        description: "Due date cannot be in the past!",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
     try {
       const response = await updateTask(editingTask._id, {
         title: editingTask.title,
@@ -179,10 +226,16 @@ function MainComponent() {
       setEditingTask(null);
       closeEditModal();
     } catch (error) {
-      console.error(error);
+      toast({
+        title: "Submission Error",
+        description: "There was an error updating the task. Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
-  
 
   const toggleCompletedTasks = async () => {
     setShowCompletedTasks(!showCompletedTasks);
@@ -301,7 +354,7 @@ function MainComponent() {
   return (
     <div>
       <Navbar />
-      <Box as="form" onSubmit={handleSubmit} mb={4} maxW="500px" mx="auto">
+      <Box as="form" onSubmit={handleSubmit} mb={4} maxW="550px" mx="auto">
         <Input
           name="title"
           placeholder="Task Title"
@@ -343,21 +396,31 @@ function MainComponent() {
           Add Task
         </Button>
       </Box>
-      <Box maxW="500px" mx="auto">
-        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}}>
+      <Box maxW="550px" mx="auto">
+        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
           {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
         </Button>
-        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}}>
+        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
           {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
         </Button>
+
+        {tasks.length === 0 && !showCompletedTasks && !showIncompletedTasks ? (
+          <Text fontSize="xl" textAlign="center" mt={4}>
+            No tasks available
+          </Text>
+        ) : (showCompletedTasks && completedTasks.length === 0) || (showIncompletedTasks && incompleteTasks.length === 0) ? (
+          <Text fontSize="xl" textAlign="center" mt={4}>
+            No tasks available
+          </Text>
+        ) : null}
       </Box>
-      <Box maxW="500px" mx="auto">
+      <Box maxW="550px" mx="auto">
         <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
           {(showCompletedTasks
             ? completedTasks
             : showIncompletedTasks
-            ? incompleteTasks
-            : tasks
+              ? incompleteTasks
+              : tasks
           ).map((task, index) => (
             <li key={task._id} style={{ marginBottom: "1rem" }}>
               <Box
@@ -379,10 +442,11 @@ function MainComponent() {
                 >
                   <Button
                     onClick={() => openTaskDetailsModal(task)}
-                    bg="#fa893e" color= "white" _hover={{bg :"#fa6e11"}}
+                    bg="#fa893e" color="white" _hover={{ bg: "#fa6e11" }}
                   >
                     View Details
                   </Button>
+
                   <Box display={{ base: "block", md: "none" }}>
                     <Menu
                       isOpen={isMenuOpen}
@@ -515,7 +579,7 @@ function MainComponent() {
                   border="2px"
                   borderColor="gray.400"
                 />
-                <Button type="submit" bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}} mt={2}>
+                <Button type="submit" bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }} mt={2}>
                   Update Task
                 </Button>
               </Box>
@@ -556,7 +620,7 @@ function MainComponent() {
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button bg="#0c75cd" color= "white" _hover={{bg :"#0c60cd"}} mr={3} onClick={closeModal}>
+            <Button bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }} mr={3} onClick={closeModal}>
               Close
             </Button>
           </ModalFooter>

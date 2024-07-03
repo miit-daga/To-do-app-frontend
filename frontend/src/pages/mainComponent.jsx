@@ -397,22 +397,25 @@ function MainComponent() {
         </Button>
       </Box>
       <Box maxW="550px" mx="auto">
-        <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
-          {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
-        </Button>
-        <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
-          {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
-        </Button>
-
         {tasks.length === 0 && !showCompletedTasks && !showIncompletedTasks ? (
           <Text fontSize="xl" textAlign="center" mt={4}>
             No tasks available
           </Text>
-        ) : (showCompletedTasks && completedTasks.length === 0) || (showIncompletedTasks && incompleteTasks.length === 0) ? (
-          <Text fontSize="xl" textAlign="center" mt={4}>
-            No tasks available
-          </Text>
-        ) : null}
+        ) : (
+          <>
+            <Button onClick={toggleCompletedTasks} mr={2} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
+              {showCompletedTasks ? "Show All Tasks" : "Show Completed Tasks"}
+            </Button>
+            <Button onClick={toggleIncompletedTasks} mb={2} bg="#0c75cd" color="white" _hover={{ bg: "#0c60cd" }}>
+              {showIncompletedTasks ? "Show All Tasks" : "Show Incomplete Tasks"}
+            </Button>
+            {((showCompletedTasks && completedTasks.length === 0) || (showIncompletedTasks && incompleteTasks.length === 0)) && (
+              <Text fontSize="xl" textAlign="center" mt={4}>
+                No tasks available
+              </Text>
+            )}
+          </>
+        )}
       </Box>
       <Box maxW="550px" mx="auto">
         <ul style={{ listStyleType: "none", paddingLeft: 0 }}>

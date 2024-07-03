@@ -355,9 +355,10 @@ function MainComponent() {
     <div>
       <Navbar />
       <Box as="form" onSubmit={handleSubmit} mb={4} maxW="550px" mx="auto">
+      <FormLabel htmlFor="title">Task Title</FormLabel>
         <Input
           name="title"
-          placeholder="Task Title"
+          placeholder="Enter task title"
           value={newTask.title}
           onChange={handleChange}
           required
@@ -365,9 +366,10 @@ function MainComponent() {
           border="2px"
           borderColor="gray.400"
         />
+        <FormLabel htmlFor="description">Task Description</FormLabel>
         <Textarea
           name="description"
-          placeholder="Task Description"
+          placeholder="Enter task description"
           value={newTask.description}
           onChange={handleChange}
           mb={2}
@@ -550,9 +552,10 @@ function MainComponent() {
           <ModalBody>
             {editingTask && (
               <Box as="form" onSubmit={handleEditSubmit}>
+                <FormLabel htmlFor="title">Task Title</FormLabel>
                 <Input
                   name="title"
-                  placeholder="Task Title"
+                  placeholder="Enter task title"
                   value={editingTask.title}
                   onChange={handleEditChange}
                   required
@@ -560,9 +563,10 @@ function MainComponent() {
                   border="2px"
                   borderColor="gray.400"
                 />
+                <FormLabel htmlFor="description">Task Description</FormLabel>
                 <Textarea
                   name="description"
-                  placeholder="Task Description"
+                  placeholder="Enter task description"
                   value={editingTask.description}
                   onChange={handleEditChange}
                   required
